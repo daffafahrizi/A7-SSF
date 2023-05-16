@@ -1,28 +1,24 @@
-;------------------------
-; Assembly Code
-;------------------------
 #define __SFR_OFFSET 0x00
 #include "avr/io.h"
 ;------------------------
-.global HC_SR04_sensor
+.global main
+.equ  SCK, 5
+.equ  MOSI, 3
+.equ  SS, 2
+main:
+  SBI DDRB, 1     ;pin PB1 as o/p (Trigger)
+  CBI DDRB, 0     ;pin PB0 as i/p (Echo)
+  SBI DDRD, 4     ;pin PD4 as o/p (LED)
+loop:
+  ;proses mendapatkan input dari sensor jarak
+  SBI   PORTB, 1
+  RCALL delay_timer0
+  CBI   PORTB, 1        ;send 10us high pulse to sensor
+  RCALL echo_PW         ;compute Echo pulse width count
+  RCALL dsp
+  RJMP  loop
 ;===============================================================
-HC_SR04_sensor:
-;--------------
-    SBI   DDRB, 1         ;pin PB1 as o/p (Trigger)
-    CBI   DDRB, 0         ;pin PB0 as i/p (Echo)
-    SBI   DDRB, 5         ;pin PB5 as output led
-    ;-----------------------------------------------------------
-agn:SBI   PORTB, 1
-    RCALL delay_timer0
-    CBI   PORTB, 1        ;send 10us high pulse to sensor
-    ;-----------------------------------------------------------
-    RCALL echo_PW         ;compute Echo pulse width count
-    ;-----------------------------------------------------------
-    RCALL byte2decimal    ;covert & display on MAX7219
-    ;-----------------------------------------------------------
-    RCALL delay_ms
-    RJMP  agn
-;===============================================================
+
 echo_PW:
 ;-------
     LDI   R20, 0b00000000
@@ -30,7 +26,8 @@ echo_PW:
     LDI   R20, 0b11000101 ;set for rising edge detection &
     STS   TCCR1B, R20     ;prescaler=1024, noise cancellation ON
     ;-----------------------------------------------------------
-l1: IN    R21, TIFR1
+l1: 
+    IN    R21, TIFR1
     SBRS  R21, ICF1
     RJMP  l1              ;loop until rising edge is detected
     ;-----------------------------------------------------------
@@ -40,41 +37,30 @@ l1: IN    R21, TIFR1
     LDI   R20, 0b10000101
     STS   TCCR1B, R20     ;set for falling edge detection
     ;-----------------------------------------------------------
-l2: IN    R21, TIFR1
+l2: 
+    IN    R21, TIFR1
     SBRS  R21, ICF1
     RJMP  l2              ;loop until falling edge is detected
     ;-----------------------------------------------------------
     LDS   R28, ICR1L      ;store count value at falling edge
     ;-----------------------------------------------------------
-    SUB   R28, R16        ;count diff R22 = R22 - R16
+    SUB   R28, R16        ;count diff R28 = R28 - R16
     OUT   TIFR1, R21      ;clear flag for next sensor reading
     RET
-;==============================================================
-byte2decimal:
-;------------
-      CLR   R26             ;set counter1, initial value 0
-      CLR   R27             ;set counter2, initial value 0
-      ;--------------------------------------------------------
-l70:  CPI   R28, 100        ;compare R28 with 100
-Ret:  BRMI  l80             ;jump when R28 < 100
-      INC   R26             ;increment counter1 by 1
-      SUBI  R28, 100        ;R28 = R28 - 100
-      RJMP  l70
-      ;--------------------------------------------------------
-l80:  CPI   R28, 10         ;compare R28 with 10
-      BRMI  dsp             ;jump when R28 < 10
-      INC   R27             ;increment counter2 by 1
-      SUBI  R28, 10         ;R28 = R28 - 10
-      RJMP  l80
-      ;--------------------------------------------------------  
-dsp:  CPI   R27, 0
-      BRCS ledOff
-      CPI R27, 3
-      BRSH ledOff
-      CBI PORTB, 5
-      RET
-ledOff:
-      RET
+ 
+ dsp: 
+  CPI R28, 9
+  BRSH no   ;Jika jarak lebih dari 10 cm, branch ke no
+  RJMP yes ;Jika jarak kurang dari 10 cm, branch ke yes
+
+no:
+  cbi PORTD, 4 ;mematikan LED
+  RJMP loop 
+
+yes:
+  sbi PORTD, 4 ;Menyalakan LED
+  RJMP loop
+
 ;===============================================================
 ;delay subroutines
 ;===============================================================
