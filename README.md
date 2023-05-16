@@ -21,7 +21,7 @@
 placeholder
 
 # Software Implementation 
-During the production phase, we utilized the Arduino application for programming and uploading code to the Arduino Uno microcontroller used in our Ecobin project. To work with assembly code, the Arduino application can be installed by following the link provided: https://www.arduino.cc/en/software.
+During the software development and implementation phase, we utilized the Arduino application for programming and uploading code to the Arduino Uno microcontroller used in our Ecobin project. To work with assembly code, the Arduino application can be installed by following the link provided: https://www.arduino.cc/en/software.
 
 The code incorporates several subroutines to control the HC-SR04 ultrasonic sensor, SG90 servo motor, button, and delay functionalities. At the beginning of the code, we define the SFR offset and import the "avr/io.h" file, which contains the AVR microcontroller register declarations. The main function serves as the program's primary function that is executed repeatedly. Within the main function, there are calls to the HC_SR04_sensor function and RJMP to return to the main. The HC_SR04_sensor function performs measurements using the HC-SR04 sensor. It contains instructions to set up the I/O pins of the microcontroller for connecting with the HC-SR04 sensor. After the pin configuration is completed, a high pulse signal is sent to the HC-SR04 sensor for a duration of 10 microseconds. Subsequently, the echo_PW function is called to calculate the pulse width received from the HC-SR04 sensor. Once the pulse width is obtained, data conversion and display are performed using the byte2decimal function. Finally, a delay of a few milliseconds is introduced using the delay_ms function.
 
