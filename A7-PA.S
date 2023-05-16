@@ -57,9 +57,6 @@ lh2: IN    R21, TIFR1
     OUT   TIFR1, R21      ;clear flag for next sensor reading
     RET
 
-;===============================================================
-; MAX7219 subroutines
-;===============================================================
 byte2decimal:
 ;------------
       CLR   R26             ;set counter1, initial value 0
@@ -87,47 +84,19 @@ RET
 
 ; Kode nyalain LED
 servo_led:
-; Turn on the LED
 SBI PORTD, 4
-; Call the servo control subroutine
-RCALL servo_control
+RCALL servo_control ; Call the servo control subroutine
 RJMP continue
 
 ; Kode matiin LED
 mati_led:
-    ; Turn off the LED
-    CBI PORTD, 4
-
-    ; Reset the servo position
-    RCALL servo_reset
-
-    RJMP continue
-
-; Servo reset subroutine
-servo_reset:
-    ; Set servo control pin (e.g., PD5) as output
-    SBI DDRD, 5
-
-    ; Move the servo to the reset position (adjust values as per servo specifications)
-    LDI R30, 0  ; Set servo angle to the reset position (0 degrees)
-    LDI R31, 0  ; Set upper byte of the servo angle to 0 (if necessary)
-
-    ; Loop to generate servo control pulse
-l2: SBI PORTD, 5   ; Set servo control pin HIGH
-    RCALL delay_timer0  ; Delay for pulse width (adjust as per servo specifications)
-    CBI PORTD, 5   ; Set servo control pin LOW
-    RCALL delay_timer0  ; Delay for remaining pulse period (adjust as per servo specifications)
-    DEC R30        ; Decrement servo angle by 1
-    BRNE l2        ; Loop until the servo reaches the reset position
-    RET
-
+CBI PORTD, 4
+RJMP continue
 
 ; Servo control subroutine
 servo_control:
-; Set servo control pin (e.g., PD5) as output
-SBI DDRD, 5
-; Move the servo to a specific angle (adjust values as per servo specifications)
-LDI R30, 90  ; Set servo angle to 90 degrees
+SBI DDRD, 5 ; Set servo control pin (e.g., PD5) as output
+LDI R30, 90  ; Set servo angle to 90 degrees ; Move the servo to a specific angle (adjust values as per servo specifications)
 LDI R31, 0   ; Set upper byte of the servo angle to 0 (if necessary)
 
 ; Loop to generate servo control pulse
