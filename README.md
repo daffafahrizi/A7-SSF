@@ -18,7 +18,7 @@
 * Power source
 
 # Hardware Design and Implementation
-placeholder
+Selama mendesign hardware, kami membuat design tersebut menggunakan proteus, di dalam proteus tersebut kami menggunakan library dari internet untuk arduino dan sensor ultrasonicnya. Dalam proteus tersebut sebelum mengimplementasikan kode, kami merubah file .S menjadi .hex terlebih dahulu lalu mengimport file .hex tersebut. Di proteus tersebut untuk mensimulasikan jarak pada Ultrasonic sensor digantikan dengan test pin yang dihubungkan dengan variable pot untuk merubah jarak tersebut.
 
 # Software Implementation 
 During the software development and implementation phase, we utilized the Arduino application for programming and uploading code to the Arduino Uno microcontroller used in our Ecobin project. To work with assembly code, the Arduino application can be installed by following the link provided: https://www.arduino.cc/en/software.
