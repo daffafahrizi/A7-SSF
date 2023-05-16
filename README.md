@@ -18,7 +18,7 @@
 * Power source
 
 # Hardware Design and Implementation
-Selama mendesign hardware, kami membuat design tersebut menggunakan proteus, di dalam proteus tersebut kami menggunakan library dari internet untuk arduino dan sensor ultrasonicnya. Dalam proteus tersebut sebelum mengimplementasikan kode, kami merubah file .S menjadi .hex terlebih dahulu lalu mengimport file .hex tersebut. Di proteus tersebut untuk mensimulasikan jarak pada Ultrasonic sensor digantikan dengan test pin yang dihubungkan dengan variable pot untuk merubah jarak tersebut.
+During the hardware design process, we created the design using Proteus. Within Proteus, we utilized libraries from the internet for Arduino and the ultrasonic sensor. Before implementing the code, we converted the .S file to .hex and then imported the .hex file. In Proteus, we simulated the distance for the ultrasonic sensor by replacing it with a test pin connected to a variable potentiometer to modify the distance.
 
 # Software Implementation 
 During the software development and implementation phase, we utilized the Arduino application for programming and uploading code to the Arduino Uno microcontroller used in our Ecobin project. To work with assembly code, the Arduino application can be installed by following the link provided: https://www.arduino.cc/en/software.
@@ -28,7 +28,7 @@ The code incorporates several subroutines to control the HC-SR04 ultrasonic sens
 Furthermore, there are additional subroutines such as a subroutine for timer-based delay and a subroutine for delay in milliseconds. These components of the code aim to control the HC-SR04 sensor and interact with the LED and servo based on the distance measurements obtained from the sensor.
 
 # Test Results and Performance Evaluation
-Setelah dilakukan pengetesan, program mampu melakukan pengukuran jarak dengan baik. Program bereksi apabila mendeteksi objek dalam jarak kurang dari 15cm dengan memberikan indikator visual lewat lampu LED dan membuka tutup tempat sampah menggunakan servo. Dalam proses produk
+After testing, the program is able to perform distance measurement well. The program will react if it detects an object within a distance of less than 15cm by providing visual indicators through LED lights and opening the trash can lid using a servo. In the product process...
 
 # Conclusion and Future Work
 placeholder
